@@ -9,12 +9,12 @@ namespace NecronomiconBot.Logic
 {
     public static class AlwaysHasBeen
     {
-        public static Stream GetImage(string astronaut1, string astronaut2, string wait)
+        public static Stream GetImage(string astronaut1, string astronaut2, string messageContent)
         {
             Mat mat = new Mat(@".\assets\wait-its-all-ohio.png");
 
-            PutCenteredText(mat, wait, new OpenCvSharp.Point(425, 200), HersheyFonts.HersheyComplex, 0.75, new Scalar(0, 0, 0), 2, LineTypes.AntiAlias);
-            PutCenteredText(mat, wait, new OpenCvSharp.Point(425, 200), HersheyFonts.HersheyComplex, 0.75, new Scalar(255, 255, 255), 1, LineTypes.AntiAlias);
+            PutCenteredText(mat, messageContent, new OpenCvSharp.Point(425, 200), HersheyFonts.HersheyComplex, 0.75, new Scalar(0, 0, 0), 2, LineTypes.AntiAlias);
+            PutCenteredText(mat, messageContent, new OpenCvSharp.Point(425, 200), HersheyFonts.HersheyComplex, 0.75, new Scalar(255, 255, 255), 1, LineTypes.AntiAlias);
 
             PutCenteredText(mat, astronaut1, new OpenCvSharp.Point(430, 245), HersheyFonts.HersheyComplex, 0.5, new Scalar(0, 0, 0), 2, LineTypes.AntiAlias);
             PutCenteredText(mat, astronaut1, new OpenCvSharp.Point(430, 245), HersheyFonts.HersheyComplex, 0.5, new Scalar(255, 255, 255), 1, LineTypes.AntiAlias);
