@@ -40,8 +40,13 @@ namespace NecronomiconBot.Modules
             else
                 message = await GetReferencedMessageAsync(Context.Message);
 
-            await Context.Channel.SendFileAsync(Logic.AlwaysHasBeen.GetImage(message.Author.Username, Context.Message.Author.Username, message.Content), "Always has been.png");
+            _ = GetImageAndSendAsync(message.Author.Username, Context.Message.Author.Username, message.Content);
 
+        }
+
+        private async Task GetImageAndSendAsync(string astronaut1, string astronaut2, string messageContetn)
+        {
+            await Context.Channel.SendFileAsync(Logic.AlwaysHasBeen.GetImage(astronaut1, astronaut2, messageContetn), "Always has been.png");
         }
 
         [Command("tell")]
