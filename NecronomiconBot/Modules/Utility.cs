@@ -8,7 +8,7 @@ using Discord.WebSocket;
 
 namespace NecronomiconBot.Modules
 {
-    public class Utility: ModuleBase<SocketCommandContext>
+    public class Utility: NecroModuleBase<SocketCommandContext>
     {
         [Command("say")]
         [Alias("echo")]

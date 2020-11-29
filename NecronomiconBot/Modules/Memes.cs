@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace NecronomiconBot.Modules
 {
-    public class Memes : ModuleBase<SocketCommandContext>
+    public class Memes : NecroModuleBase<SocketCommandContext>
     {
         [Command("step on me")]
         public Task StepOnMe()
