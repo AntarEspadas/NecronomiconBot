@@ -53,6 +53,8 @@ namespace NecronomiconBot
             }
             config.Save();
 
+            var socketConfig = new DiscordSocketConfig();
+            socketConfig.MessageCacheSize = 100;
             _client = new DiscordSocketClient();
             //_client.MessageReceived += LogMessage;
             _client.Log += Log;

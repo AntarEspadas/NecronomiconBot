@@ -21,14 +21,10 @@ namespace NecronomiconBot.Modules
         public Task Avatar([Remainder]SocketUser user)
             => ReplyAsync(user.GetAvatarUrl(size: 256));
 
-        [Command("userinfo")]
-        [Summary ("Returns info about the current user, or the user parameter, if one passed.")]
-        [Alias("user", "whois")]
-        public async Task UserInfoAsync(
-        [Summary("The (optional) user to get info from")] [Remainder]SocketUser user = null)
+        [Command("unedit")]
+        public async Task UneditAsync()
         {
-            var userInfo = user ?? Context.User;
-            await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}");
+            IMessage message = await GetParentMessageAsync(Context.Message);
         }
     }
 }
