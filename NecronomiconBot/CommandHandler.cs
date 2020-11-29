@@ -62,7 +62,12 @@ namespace NecronomiconBot
 
             var context = new SocketCommandContext(_client, message);
             
-            await _commands.ExecuteAsync(context: context, argPos: argPos, services: null);
+            var result = await _commands.ExecuteAsync(context: context, argPos: argPos, services: null);
+            if (!result.IsSuccess)
+            {
+                Console.WriteLine($"Error: {result.Error}");
+                Console.WriteLine($"Reason: {result.ErrorReason}");
+            }
 
         }
 
