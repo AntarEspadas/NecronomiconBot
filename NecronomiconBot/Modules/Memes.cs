@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NecronomiconBot.Modules
 {
@@ -48,6 +51,23 @@ namespace NecronomiconBot.Modules
             }
             await Context.Channel.SendFileAsync(Logic.AlwaysHasBeen.GetImage(message.Author.Username, Context.Message.Author.Username, message.Content), "Always has been.png");
 
+        }
+
+        [Command("tell")]
+        public async Task Tell(SocketUser user, [Remainder] string sentence)
+        {
+            Regex regex = new Regex("to go fuck (himself)|(herself)|(themselves)|(itself)");
+            if (regex.IsMatch(sentence))
+            {
+                if (Program.Authors.Contains(user.Id))
+                {
+                    await ReplyAsync($"I love you {user.Mention}");
+                }
+                else
+                {
+                    await ReplyAsync($"{user.Mention}, go fuck yourself");
+                }
+            }
         }
 
     }

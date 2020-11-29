@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +12,8 @@ namespace NecronomiconBot
     class Program
     {
 
-        private System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        public static readonly IReadOnlyCollection<ulong> Authors = new List<ulong>() { 189514032242360320/*Naratna*/ }.AsReadOnly();
+        public static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         private DiscordSocketClient _client;
         private CommandService _commands;
         private CommandHandler _handler;
@@ -85,9 +87,7 @@ namespace NecronomiconBot
 
         static void Testing()
         {
-            FileStream file = new FileStream(@"D:\Desarrollo\C#\NecronomiconBot\test.png",FileMode.Create);
-            Logic.AlwaysHasBeen.GetImage("astronaut1", "astronaut2", "wait, it's all Ohio?").CopyTo(file);
-            file.Close();
+            Console.WriteLine(config.AppSettings.Settings["unknown"]);
         }
 
     }
