@@ -28,12 +28,30 @@ namespace NecronomiconBot
                 Testing();
                 return;
             }
-            if (args.Length == 1)
+
+            Console.WriteLine();
+            var token = config.AppSettings.Settings["Token"];
+            if (token == null || token.Value == string.Empty)
             {
-                config.AppSettings.Settings["Token"].Value = args[0];
-                config.Save();
+                while (true)
+                {
+                    Console.WriteLine("Please enter your bot's token:");
+                    token.Value = Console.ReadLine();
+                    if (token.Value != string.Empty)
+                        break;
+                }
+                
             }
-            string token = config.AppSettings.Settings["Token"].Value;
+            else
+            {
+                Console.WriteLine("Please enter your bot's token (leave empty to use previously used token):");
+                string tokenValue = Console.ReadLine();
+                if (tokenValue != string.Empty)
+                {
+                    token.Value = tokenValue;
+                }
+            }
+            config.Save();
 
             _client = new DiscordSocketClient();
             //_client.MessageReceived += LogMessage;
@@ -44,7 +62,7 @@ namespace NecronomiconBot
             _handler = new CommandHandler(_client, _commands);
 
             await _handler.InstallCommandsAsync();
-            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.LoginAsync(TokenType.Bot, token.Value);
             await _client.StartAsync();
 
             await Task.Delay(-1);
