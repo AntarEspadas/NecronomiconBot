@@ -34,21 +34,12 @@ namespace NecronomiconBot.Modules
         {
             var reference = Context.Message.Reference;
             IMessage message = null;
+
             if (reference == null)
-            {
-                var asyncMessages = Context.Channel.GetMessagesAsync(Context.Message, Direction.Before, 1);
-                var messages = await AsyncEnumerableExtensions.FlattenAsync(asyncMessages);
-                foreach (var item in messages)
-                {
-                    message = item;
-                }
-            }
+                message = await GetPreviousMessageAsync(Context.Message);
             else
-            {
-                var guild = Context.Client.GetGuild(reference.GuildId.Value);
-                var channel = guild.GetTextChannel(reference.ChannelId);
-                message = await channel.GetMessageAsync(reference.MessageId.Value);
-            }
+                message = await GetReferencedMessageAsync(Context.Message);
+
             await Context.Channel.SendFileAsync(Logic.AlwaysHasBeen.GetImage(message.Author.Username, Context.Message.Author.Username, message.Content), "Always has been.png");
 
         }
@@ -68,6 +59,29 @@ namespace NecronomiconBot.Modules
                     await ReplyAsync($"{user.Mention}, go fuck yourself");
                 }
             }
+        }
+
+        private async Task<IMessage> GetPreviousMessageAsync(IMessage message)
+        {
+            IMessage previousMessage = null;
+            var asyncMessages = Context.Channel.GetMessagesAsync(Context.Message, Direction.Before, 1);
+            var messages = await AsyncEnumerableExtensions.FlattenAsync(asyncMessages);
+            foreach (var item in messages)
+            {
+                previousMessage = item;
+            }
+            return previousMessage;
+        }
+
+        private async Task<IMessage> GetReferencedMessageAsync(IMessage message)
+        {
+            var reference = message.Reference;
+            if (reference == null)
+                return null;
+
+            var guild = Context.Client.GetGuild(reference.GuildId.Value);
+            var channel = guild.GetTextChannel(reference.ChannelId);
+            return await channel.GetMessageAsync(reference.MessageId.Value);
         }
 
     }
