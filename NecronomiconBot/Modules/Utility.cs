@@ -28,10 +28,26 @@ namespace NecronomiconBot.Modules
             if (message.EditedTimestamp != null)
             {
                 var messages = Logic.MessageHistory.Instance.GetHistory(message);
-                foreach (var item in messages)
-                {
-                    Console.WriteLine(item.Content);
-                }
+                _ = SendAllHistory(messages, message.Author);
+            }
+        }
+        private async Task SendAllHistory(ICollection<IMessage> messages, IUser author)
+        {
+            var authorBuilder = new EmbedAuthorBuilder()
+            {
+                IconUrl = author.GetAvatarUrl(),
+                Name = author.Username
+            };
+            var eb = new EmbedBuilder()
+            {
+                Author = authorBuilder
+            };
+            foreach (var item in messages)
+            {
+                eb.Timestamp = item.EditedTimestamp ?? item.Timestamp;
+                eb.Url = item.GetJumpUrl();
+                eb.Description = item.Content;
+                await ReplyAsync(embed: eb.Build());
             }
         }
     }
