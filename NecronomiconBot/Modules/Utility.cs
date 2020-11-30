@@ -25,6 +25,14 @@ namespace NecronomiconBot.Modules
         public async Task UneditAsync()
         {
             IMessage message = await GetParentMessageAsync(Context.Message);
+            if (message.EditedTimestamp != null)
+            {
+                var messages = Logic.MessageHistory.Instance.GetHistory(message);
+                foreach (var item in messages)
+                {
+                    Console.WriteLine(item.Content);
+                }
+            }
         }
     }
 }
