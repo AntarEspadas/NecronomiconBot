@@ -10,20 +10,19 @@ namespace NecronomiconBot.Modules
     public class NecroModuleBase<T> : ModuleBase<T> where T: class, ICommandContext
     {
         public new T Context { get => GetContext(); }
-        private readonly T context;
+        private T context;
 
         private T GetContext()
         {
             return context ?? base.Context;
         }
+        public void SetContext(T context)
+        {
+            this.context = context;
+        }
         protected override async Task<IUserMessage> ReplyAsync(string message = null, bool isTTS = false, Embed embed = null, RequestOptions options = null)
         {
             return await Context.Channel.SendMessageAsync(message, isTTS, embed, options).ConfigureAwait(false);
-        }
-
-        public NecroModuleBase(T context = null) : base()
-        {
-            this.context = context;
         }
 
         protected async Task<IMessage> GetPreviousMessageAsync(IMessage message)

@@ -14,6 +14,7 @@ namespace NecronomiconBot.Logic
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
+        private readonly NonStandardCommandHandler nonStandard;
         private static readonly string default_natural_prefix = "navi";
         private static readonly string default_prefix = "n.";
 
@@ -21,6 +22,7 @@ namespace NecronomiconBot.Logic
         {
             _client = client;
             _commands = commands;
+            nonStandard = new NonStandardCommandHandler(_client, _commands);
         }
 
         public async Task InstallCommandsAsync()
@@ -52,6 +54,7 @@ namespace NecronomiconBot.Logic
                 };
                 if (!nonPrefixCommands.Contains(message.Content.ToLower()))
                 {
+                    _ = nonStandard.HandleCommandAsync(message);
                     return;
                 }
                 else
