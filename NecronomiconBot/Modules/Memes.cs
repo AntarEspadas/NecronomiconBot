@@ -68,14 +68,16 @@ namespace NecronomiconBot.Modules
         public async Task UwutizeAsync()
         {
             var message = await GetParentMessageAsync(Context.Message);
-            await ReplyAsync(uwutize(message.Content));
+            var embed = Quote(message.Author, uwutize(message.Content), null);
+            await ReplyAsync(embed: embed.Build());
         }
 
         [Command("UwU")]
         [Alias("OwO", "UwUtize", "OwOtize")]
         public async Task UwutizeAsync([Remainder] string text)
         {
-            await ReplyAsync(uwutize(text));
+            var embed = Quote(Context.Message.Author, uwutize(text));
+            await ReplyAsync(embed:embed.Build());
         }
 
         private string uwutize(string text)
@@ -97,6 +99,19 @@ namespace NecronomiconBot.Modules
             var random = new Random();
             text = regex.Replace(text, $" {faces[random.Next(0, faces.Length)]} ");
             return text;
+        }
+
+        public async Task Gandhi()
+        {
+            var efb = new EmbedFooterBuilder() {
+                Text = "\t-Gandhi"
+            };
+            var eb = new EmbedBuilder()
+            {
+                Description = Context.Message.Content,
+                ThumbnailUrl = "https://es.wikipedia.org/wiki/Mahatma_Gandhi#/media/Archivo:Portrait_Gandhi.jpg"
+            };
+            await ReplyAsync(embed: eb.Build());
         }
     }
 }
