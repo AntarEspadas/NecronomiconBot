@@ -100,16 +100,20 @@ namespace NecronomiconBot.Modules
             text = regex.Replace(text, $" {faces[random.Next(0, faces.Length)]} ");
             return text;
         }
-
-        public async Task Gandhi()
+        [Command("Gandhi")]
+        public async Task GandhiAsync()
         {
-            var efb = new EmbedFooterBuilder() {
-                Text = "\t-Gandhi"
-            };
+            var message = await GetParentMessageAsync(Context.Message);
+            await Gandhi(message.Content);
+        }
+        [Command("Gandhi")]
+        public async Task Gandhi([Remainder]string text)
+        {
             var eb = new EmbedBuilder()
             {
-                Description = Context.Message.Content,
-                ThumbnailUrl = "https://es.wikipedia.org/wiki/Mahatma_Gandhi#/media/Archivo:Portrait_Gandhi.jpg"
+                Title = text,
+                Description = "*-Gandhi*",
+                ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/d/d1/Portrait_Gandhi.jpg",
             };
             await ReplyAsync(embed: eb.Build());
         }

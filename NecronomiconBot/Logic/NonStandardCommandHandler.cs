@@ -23,11 +23,11 @@ namespace NecronomiconBot.Logic
         public async Task HandleCommandAsync(SocketUserMessage message)
         {
             var context = new SocketCommandContext(_client, message);
-            if (new Random().Next(0,1) == 0)
+            if (new Random().Next(0,500) == 69)
             {
                 var memes = new Memes();
                 memes.SetContext(context);
-                await memes.Gandhi();
+                await memes.Gandhi(message.Content);
             }
         }
     }
