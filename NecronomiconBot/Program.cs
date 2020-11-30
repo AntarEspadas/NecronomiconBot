@@ -59,6 +59,7 @@ namespace NecronomiconBot
             //_client.MessageReceived += LogMessage;
             _client.Log += Log;
             _client.MessageUpdated += Logic.MessageHistory.Instance.AddAsync;
+            _client.MessageDeleted += Logic.MessageHistory.Instance.AddDeletedAsync;
 
             _commands = new CommandService();
 

@@ -28,16 +28,18 @@ namespace NecronomiconBot.Modules
             if (message.EditedTimestamp != null)
             {
                 var messages = Logic.MessageHistory.Instance.GetHistory(message);
-                _ = SendAllHistory(messages, message.Author);
+                _ = SendAllHistory(messages);
             }
         }
-        private async Task SendAllHistory(ICollection<IMessage> messages, IUser author)
+        [Command("undelete")]
+        public async Task UndeleteAsync()
         {
-            var authorBuilder = new EmbedAuthorBuilder()
-            {
-                IconUrl = author.GetAvatarUrl(),
-                Name = author.Username
-            };
+            var messages = Logic.MessageHistory.Instance.GetLastDeletedHistory(Context.Message.Channel);
+            _ = SendAllHistory(messages);
+        }
+        private async Task SendAllHistory(ICollection<IMessage> messages)
+        {
+            var authorBuilder = new EmbedAuthorBuilder();
             var eb = new EmbedBuilder()
             {
                 Author = authorBuilder
@@ -47,8 +49,11 @@ namespace NecronomiconBot.Modules
                 eb.Timestamp = item.EditedTimestamp ?? item.Timestamp;
                 eb.Url = item.GetJumpUrl();
                 eb.Description = item.Content;
+                authorBuilder.Name = item.Author.Username;
+                authorBuilder.IconUrl = item.Author.GetAvatarUrl();
                 await ReplyAsync(embed: eb.Build());
             }
         }
+
     }
 }

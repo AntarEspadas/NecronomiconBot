@@ -7,7 +7,7 @@ namespace NecronomiconBot.Logic
 {
     class MessageHistoryList : LinkedList<IMessage>
     {
-        public bool isDeleted { get; set; } = false;
+        public bool IsDeleted { get { return DeletedTimestamp != null; } }
         public DateTimeOffset? DeletedTimestamp { get; set; } = null;
     }
 }

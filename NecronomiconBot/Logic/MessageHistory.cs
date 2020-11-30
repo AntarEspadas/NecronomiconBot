@@ -12,8 +12,8 @@ namespace NecronomiconBot.Logic
         public static MessageHistory Instance { get => GetEditHistory(); }
         private static MessageHistory instance = null;
 
-        public Dictionary<ulong, Dictionary<ulong, Dictionary<ulong, LinkedList<IMessage>>>> Guilds { get; private set; }
-        public LinkedList<IMessage> this[ulong guildId, ulong channelId, ulong messageId] { get => GetHistory(guildId, channelId, messageId); }
+        public Dictionary<ulong, Dictionary<ulong, Dictionary<ulong, MessageHistoryList>>> Guilds { get; private set; }
+        public MessageHistoryList this[ulong guildId, ulong channelId, ulong messageId] { get => GetHistory(guildId, channelId, messageId); }
 
 
         private static MessageHistory GetEditHistory()
@@ -25,7 +25,7 @@ namespace NecronomiconBot.Logic
 
         private MessageHistory()
         {
-            Guilds = new Dictionary<ulong, Dictionary<ulong, Dictionary<ulong, LinkedList<IMessage>>>>();
+            Guilds = new Dictionary<ulong, Dictionary<ulong, Dictionary<ulong, MessageHistoryList>>>();
         }
 
         public void Add(IMessage message)
@@ -37,17 +37,17 @@ namespace NecronomiconBot.Logic
 
             if (!Guilds.ContainsKey(guildId))
             {
-                Guilds[guildId] = new Dictionary<ulong, Dictionary<ulong, LinkedList<IMessage>>>();
+                Guilds[guildId] = new Dictionary<ulong, Dictionary<ulong, MessageHistoryList>>();
             }
             var channels = Guilds[guildId];
             if (!channels.ContainsKey(channelId))
             {
-                channels[channelId] = new Dictionary<ulong, LinkedList<IMessage>>();
+                channels[channelId] = new Dictionary<ulong, MessageHistoryList>();
             }
             var messages = channels[channelId];
             if (!messages.ContainsKey(messageId))
             {
-                messages[messageId] = new LinkedList<IMessage>();
+                messages[messageId] = new MessageHistoryList();
             }
             var messageHistory = messages[messageId];
             messageHistory.AddLast(message);
@@ -61,7 +61,17 @@ namespace NecronomiconBot.Logic
             }
         }
 
-        public LinkedList<IMessage> GetHistory(IMessage message)
+        public async Task AddDeletedAsync(Cacheable<IMessage, ulong> deleted, ISocketMessageChannel channel)
+        {
+            if (deleted.HasValue)
+            {
+                var message = await deleted.GetOrDownloadAsync();
+                Add(message);
+                GetHistory(message).DeletedTimestamp = DateTimeOffset.Now;
+            }
+        }
+
+        public MessageHistoryList GetHistory(IMessage message)
         {
             var channel = message.Channel as SocketTextChannel;
             ulong guildId = channel.Guild.Id;
@@ -71,18 +81,42 @@ namespace NecronomiconBot.Logic
             return this[guildId, channelId, messageId];
         }
 
-        private LinkedList<IMessage> GetHistory(ulong guildId, ulong channelId, ulong messageId)
+        private MessageHistoryList GetHistory(ulong guildId, ulong channelId, ulong messageId)
         {
-            Dictionary<ulong, Dictionary<ulong, LinkedList<IMessage>>> channels;
+            Dictionary<ulong, Dictionary<ulong, MessageHistoryList>> channels;
             if (!Guilds.TryGetValue(guildId, out channels))
                 return null;
-            Dictionary<ulong, LinkedList<IMessage>> messages;
+            Dictionary<ulong, MessageHistoryList> messages;
             if (!channels.TryGetValue(channelId, out messages))
                 return null;
-            LinkedList<IMessage> messageHistory;
+            MessageHistoryList messageHistory;
             if (!messages.TryGetValue(messageId, out messageHistory))
                 return null;
             return messages[messageId];
+        }
+
+        public MessageHistoryList GetLastDeletedHistory(IMessageChannel channel)
+        {
+            var textChannel = channel as SocketTextChannel;
+            ulong guildId = textChannel.Guild.Id;
+            ulong channelId = channel.Id;
+
+            if (!Guilds.ContainsKey(guildId))
+            {
+                Guilds[guildId] = new Dictionary<ulong, Dictionary<ulong, MessageHistoryList>>();
+            }
+            var channels = Guilds[guildId];
+            if (!channels.ContainsKey(channelId))
+            {
+                channels[channelId] = new Dictionary<ulong, MessageHistoryList>();
+            }
+            var messages = channels[channelId];
+            var latest = new MessageHistoryList();
+            latest.DeletedTimestamp = DateTimeOffset.MinValue;
+            foreach (var history in messages)
+                if (history.Value.IsDeleted && history.Value.DeletedTimestamp > latest.DeletedTimestamp)
+                    latest = history.Value;
+            return latest;
         }
     }
 }
