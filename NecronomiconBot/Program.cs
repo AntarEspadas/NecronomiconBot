@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using NecronomiconBot.Logic;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
