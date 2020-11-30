@@ -39,18 +39,9 @@ namespace NecronomiconBot.Modules
         }
         private async Task SendAllHistory(ICollection<IMessage> messages)
         {
-            var authorBuilder = new EmbedAuthorBuilder();
-            var eb = new EmbedBuilder()
-            {
-                Author = authorBuilder
-            };
             foreach (var item in messages)
             {
-                eb.Timestamp = item.EditedTimestamp ?? item.Timestamp;
-                eb.Url = item.GetJumpUrl();
-                eb.Description = item.Content;
-                authorBuilder.Name = item.Author.Username;
-                authorBuilder.IconUrl = item.Author.GetAvatarUrl();
+                var eb = Quote(item.Author, item.Content, item.Timestamp);
                 await ReplyAsync(embed: eb.Build());
             }
         }

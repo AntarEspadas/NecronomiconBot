@@ -39,5 +39,21 @@ namespace NecronomiconBot.Modules
             else
                 return await GetReferencedMessageAsync(message);
         }
+
+        protected EmbedBuilder Quote(IUser author, string text, DateTimeOffset? timestamp = null)
+        {
+            var eab = new EmbedAuthorBuilder()
+            {
+                IconUrl = author.GetAvatarUrl(),
+                Name = author.Username
+            };
+            var eb = new EmbedBuilder()
+            {
+                Author = eab,
+                Timestamp = timestamp,
+                Description = text
+            };
+            return eb;
+        }
     }
 }
