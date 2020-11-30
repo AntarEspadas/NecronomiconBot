@@ -55,9 +55,10 @@ namespace NecronomiconBot
 
             var socketConfig = new DiscordSocketConfig();
             socketConfig.MessageCacheSize = 100;
-            _client = new DiscordSocketClient();
+            _client = new DiscordSocketClient(socketConfig);
             //_client.MessageReceived += LogMessage;
             _client.Log += Log;
+            _client.MessageUpdated += Logic.MessageHistory.Instance.AddAsync;
 
             _commands = new CommandService();
 
