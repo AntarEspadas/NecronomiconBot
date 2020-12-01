@@ -78,7 +78,7 @@ namespace NecronomiconBot.Logic
         {
             var list = new LinkedList<string>();
             list.AddLast(defaultValue);
-            return GetGuildSetting(guildId, setting);
+            return GetGuildSetting(guildId, setting, list);
         }
 
         public LinkedList<string> GetGlobalUserSetting(ulong userId, string setting)
@@ -104,7 +104,7 @@ namespace NecronomiconBot.Logic
         {
             var list = new LinkedList<string>();
             list.AddLast(defaultValue);
-            return GetGlobalUserSetting(userId, setting);
+            return GetGlobalUserSetting(userId, setting, list);
         }
 
         public LinkedList<string> GetUserSetting(ulong guildId, ulong userId, string setting)
@@ -133,7 +133,7 @@ namespace NecronomiconBot.Logic
         {
             var list = new LinkedList<string>();
             list.AddLast(defaultValue);
-            return GetUserSetting(guildId, userId, setting);
+            return GetUserSetting(guildId, userId, setting, list);
         }
         private TValue GetValueOrCreate<TKey, TValue>(TKey key, Dictionary<TKey, TValue> dict) where TValue : new()
         {
