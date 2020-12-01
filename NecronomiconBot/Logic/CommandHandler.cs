@@ -74,16 +74,14 @@ namespace NecronomiconBot.Logic
 
         }
 
-        private string GetNaturalPrefix(ulong guildId)
-        {
-            var prefix = Program.config.AppSettings.Settings["natural_prefix_" + guildId];
-            return prefix == null ? default_natural_prefix : prefix.Value;
-        }
-
         private string GetPrefix(ulong guildId)
         {
-            var prefix = Program.config.AppSettings.Settings["prefix_" + guildId];
-            return prefix == null ? default_prefix : prefix.Value;
+            return BotSettings.Instance.GetGuildSetting(guildId, "prefix", default_prefix).First.Value;
+        }
+
+        private string GetNaturalPrefix(ulong guildId)
+        {
+            return BotSettings.Instance.GetGuildSetting(guildId, "natural_prefix", default_natural_prefix).First.Value;
         }
     }
 }
