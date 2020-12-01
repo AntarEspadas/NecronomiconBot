@@ -27,7 +27,7 @@ namespace NecronomiconBot.Logic
             {
                 var memes = new Memes();
                 memes.SetContext(context);
-                await memes.Gandhi(message.Content);
+                await memes.FakeQuote(message.Content);
             }
         }
     }
