@@ -14,7 +14,6 @@ namespace NecronomiconBot
     {
 
         public static readonly IReadOnlyCollection<ulong> Authors = new List<ulong>() { 189514032242360320/*Naratna*/ }.AsReadOnly();
-        public static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         private DiscordSocketClient _client;
         private CommandService _commands;
         private CommandHandler _handler;
@@ -31,14 +30,14 @@ namespace NecronomiconBot
             }
 
             Console.WriteLine();
-            var token = config.AppSettings.Settings["Token"];
-            if (token == null || token.Value == string.Empty)
+            var settings = BotSettings.Instance;
+            if (settings.Token == null || settings.Token == string.Empty)
             {
                 while (true)
                 {
                     Console.WriteLine("Please enter your bot's token:");
-                    token.Value = Console.ReadLine();
-                    if (token.Value != string.Empty)
+                    settings.Token = Console.ReadLine();
+                    if (settings.Token != string.Empty)
                         break;
                 }
                 
@@ -49,10 +48,10 @@ namespace NecronomiconBot
                 string tokenValue = Console.ReadLine();
                 if (tokenValue != string.Empty)
                 {
-                    token.Value = tokenValue;
+                    settings.Token = tokenValue;
                 }
             }
-            config.Save();
+            settings.Save();
 
             var socketConfig = new DiscordSocketConfig();
             socketConfig.MessageCacheSize = 100;
@@ -67,7 +66,7 @@ namespace NecronomiconBot
             _handler = new CommandHandler(_client, _commands);
 
             await _handler.InstallCommandsAsync();
-            await _client.LoginAsync(TokenType.Bot, token.Value);
+            await _client.LoginAsync(TokenType.Bot, settings.Token);
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -110,7 +109,6 @@ namespace NecronomiconBot
 
         static void Testing()
         {
-            Console.WriteLine(config.AppSettings.Settings["unknown"]);
         }
 
     }
