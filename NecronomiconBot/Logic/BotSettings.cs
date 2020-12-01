@@ -20,21 +20,36 @@ namespace NecronomiconBot.Logic
         private Timer timer;
         public string Token { get; set; } = null;
         public static readonly string path = Path.Combine(".","BotSettings.json");
+        public static readonly string backupPath = Path.Combine(".", "BotSettings.backup.json");
+        public static readonly string secondBackupPath = Path.Combine(".", "BotSettings.backup.backup.json");
 
         private static BotSettings GetInstance()
         {
+            bool save = true;
             if (instance == null)
                 try
                 {
                     string json = File.ReadAllText(path);
                     instance = JsonConvert.DeserializeObject<BotSettings>(json);
+
                 }
-                catch (Exception)
+                catch (FileNotFoundException)
                 {
                 }
-            else
-                return instance;
-            return instance ??= new BotSettings();
+            try
+            {
+                File.Copy(backupPath, secondBackupPath, true);
+                File.Copy(path, backupPath, true);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error ocurred when trying to created the settings backup file. Saving of user or guild settings will be disabled for this session");
+                save = false;
+            }
+            instance ??= new BotSettings();
+            if(save)
+                instance.timer.Start();
+            return instance;
         }
 
         private BotSettings()
@@ -42,7 +57,6 @@ namespace NecronomiconBot.Logic
             timer = new Timer();
             timer.Interval = 10000;
             timer.Elapsed += Timer_Elapsed;
-            timer.Start();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
