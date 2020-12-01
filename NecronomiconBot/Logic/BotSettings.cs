@@ -61,10 +61,50 @@ namespace NecronomiconBot.Logic
             return GetValueOrCreate(setting, settings);
         }
 
+        public LinkedList<string> GetGuildSetting(ulong guildId, string setting, LinkedList<string> defaultValue)
+        {
+            var settingList = GetGuildSetting(guildId, setting);
+            if (settingList.Count == 0)
+                return defaultValue;
+            return settingList;
+        }
+
+        public LinkedList<string> GetGuildSetting(ulong guildId, string setting, IEnumerable<string> defaultValue)
+        {
+            return GetGuildSetting(guildId, setting, new LinkedList<string>(defaultValue));
+        }
+
+        public LinkedList<string> GetGuildSetting(ulong guildId, string setting, string defaultValue)
+        {
+            var list = new LinkedList<string>();
+            list.AddLast(defaultValue);
+            return GetGuildSetting(guildId, setting);
+        }
+
         public LinkedList<string> GetGlobalUserSetting(ulong userId, string setting)
         {
             var settings = GetValueOrCreate(userId, GlobalUserSettings);
             return GetValueOrCreate(setting, settings);
+        }
+
+        public LinkedList<string> GetGlobalUserSetting(ulong userId, string setting, LinkedList<string> defaultValue)
+        {
+            var settingList = GetGlobalUserSetting(userId, setting);
+            if (settingList.Count == 0)
+                return defaultValue;
+            return settingList;
+        }
+
+        public LinkedList<string> GetGlobalUserSetting(ulong userId, string setting, IEnumerable<string> defaultValue)
+        {
+            return GetGlobalUserSetting(userId, setting, new LinkedList<string>(defaultValue));
+        }
+
+        public LinkedList<string> GetGlobalUserSetting(ulong userId, string setting, string defaultValue)
+        {
+            var list = new LinkedList<string>();
+            list.AddLast(defaultValue);
+            return GetGlobalUserSetting(userId, setting);
         }
 
         public LinkedList<string> GetUserSetting(ulong guildId, ulong userId, string setting)
@@ -76,6 +116,25 @@ namespace NecronomiconBot.Logic
             return settingList;
         }
 
+        public LinkedList<string> GetUserSetting(ulong guildId, ulong userId, string setting, LinkedList<string> defaultValue)
+        {
+            var settingList = GetUserSetting(guildId, userId, setting);
+            if (settingList.Count == 0)
+                return defaultValue;
+            return settingList;
+        }
+
+        public LinkedList<string> GetUserSetting(ulong guildId, ulong userId, string setting, IEnumerable<string> defaultValue)
+        {
+            return GetUserSetting(guildId, userId, setting, new LinkedList<string>(defaultValue));
+        }
+
+        public LinkedList<string> GetUserSetting(ulong guildId, ulong userId, string setting, string defaultValue)
+        {
+            var list = new LinkedList<string>();
+            list.AddLast(defaultValue);
+            return GetUserSetting(guildId, userId, setting);
+        }
         private TValue GetValueOrCreate<TKey, TValue>(TKey key, Dictionary<TKey, TValue> dict) where TValue : new()
         {
             if (dict.TryGetValue(key, out var value))
