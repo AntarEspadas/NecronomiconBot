@@ -22,11 +22,12 @@ namespace NecronomiconBot.Logic
         public static readonly string path = Path.Combine(".","BotSettings.json");
         public static readonly string backupPath = Path.Combine(".", "BotSettings.backup.json");
         public static readonly string secondBackupPath = Path.Combine(".", "BotSettings.backup.backup.json");
+        private static bool save = true;
 
         private static BotSettings GetInstance()
         {
-            bool save = true;
             if (instance == null)
+            {
                 try
                 {
                     string json = File.ReadAllText(path);
@@ -36,19 +37,24 @@ namespace NecronomiconBot.Logic
                 catch (FileNotFoundException)
                 {
                 }
-            try
-            {
-                File.Copy(backupPath, secondBackupPath, true);
-                File.Copy(path, backupPath, true);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("An error ocurred when trying to created the settings backup file. Saving of user or guild settings will be disabled for this session");
-                save = false;
+
+                try { File.Copy(backupPath, secondBackupPath, true); }
+                catch (FileNotFoundException) { }
+                catch (Exception)
+                {
+                    Console.WriteLine("An error ocurred when trying to created the settings backup file. Saving of user or guild settings will be disabled for this session");
+                    save = false;
+                }
+
+                try { File.Copy(path, backupPath, true); }
+                catch (FileNotFoundException) { }
+                catch (Exception)
+                {
+                    Console.WriteLine("An error ocurred when trying to created the settings backup file. Saving of user or guild settings will be disabled for this session");
+                    save = false;
+                }
             }
             instance ??= new BotSettings();
-            if(save)
-                instance.timer.Start();
             return instance;
         }
 
@@ -66,6 +72,8 @@ namespace NecronomiconBot.Logic
 
         public void Save()
         {
+            if (!save)
+                return;
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(path, json);
         }
