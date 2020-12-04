@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using NecronomiconBot.Settings;
 
 namespace NecronomiconBot.Logic
 {
@@ -40,10 +41,10 @@ namespace NecronomiconBot.Logic
 
             //string naturalPrefix = GetNaturalPrefix(messageParam.Source)
             var channel = message.Channel as SocketGuildChannel;
-            string natural_prefix = GetNaturalPrefix(channel.Guild.Id);
-            string prefix = GetPrefix(channel.Guild.Id);
+            string naturalPrefix = GetPrefix("natural", channel.Guild.Id, channel.Id, message.Author.Id);
+            string prefix = GetPrefix("synthetic", channel.Guild.Id, channel.Id, message.Author.Id);
 
-            if (!(message.HasStringPrefix(natural_prefix + " ", ref argPos) || message.HasStringPrefix(natural_prefix + ", ", ref argPos)
+            if (!(message.HasStringPrefix(naturalPrefix + " ", ref argPos) || message.HasStringPrefix(naturalPrefix + ", ", ref argPos)
                 || message.HasStringPrefix(prefix, ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos)))
             {
                 if (message.Author.IsBot)
@@ -74,14 +75,11 @@ namespace NecronomiconBot.Logic
 
         }
 
-        private string GetPrefix(ulong guildId)
+        private string GetPrefix(string type, ulong guildId, ulong channelId, ulong userId)
         {
-            return BotSettings.Instance.GetGuildSetting(guildId, "prefix", default_prefix).First.Value;
-        }
-
-        private string GetNaturalPrefix(ulong guildId)
-        {
-            return BotSettings.Instance.GetGuildSetting(guildId, "natural_prefix", default_natural_prefix).First.Value;
+            if (BotSettings.Instance.GetChannelSettingOrDefault<bool>("prefix:use-user-defined", guildId, channelId)[0])
+                return BotSettings.Instance.GetUserSettingOrDefault<string>($"prefix:{type}", guildId, userId)[0];
+            return BotSettings.Instance.GetChannelSettingOrDefault<string>($"prefix:{type}", guildId, channelId)[0];
         }
     }
 }
