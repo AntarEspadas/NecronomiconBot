@@ -4,9 +4,13 @@ using Discord.WebSocket;
 using NecronomiconBot.Logic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using NecronomiconBot.Settings;
 
 namespace NecronomiconBot
 {
@@ -29,7 +33,7 @@ namespace NecronomiconBot
                 return;
             }
 
-            Console.WriteLine();
+            BotSettings.Init(Path.Combine(".", "BotSettings.json"), Path.Combine(".", "BotSettingsSchema.json"));
             var settings = BotSettings.Instance;
             if (settings.Token == null || settings.Token == string.Empty)
             {
