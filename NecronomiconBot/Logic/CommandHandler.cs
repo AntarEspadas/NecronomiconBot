@@ -16,8 +16,6 @@ namespace NecronomiconBot.Logic
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
         private readonly NonStandardCommandHandler nonStandard;
-        private static readonly string default_natural_prefix = "navi";
-        private static readonly string default_prefix = "n.";
 
         public CommandHandler(DiscordSocketClient client, CommandService commands)
         {
