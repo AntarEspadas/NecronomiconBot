@@ -18,7 +18,6 @@ namespace NecronomiconBot.Modules
         public class LiveShare : NecroModuleBase<SocketCommandContext>
         {
             private static string path;
-            private static FileStream file;
             private static FileSystemWatcher watcher = null;
             private static string messageContent;
             private static string code;
@@ -78,9 +77,16 @@ namespace NecronomiconBot.Modules
                     $"Status: **[%status%]**\n" +
                     $"```{language}\n%code%```";
                 mutex.WaitOne();
-                code = ReadAll(path);
-                message = await ReplyAsync(messageContent.Replace("%status%", "ONLINE").Replace("%code%", code));
-                mutex.ReleaseMutex();
+                try
+                {
+                    code = ReadAll(path);
+                    message = await ReplyAsync(messageContent.Replace("%status%", "ONLINE").Replace("%code%", code));
+                    mutex.ReleaseMutex();
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
 
                 watcher = new FileSystemWatcher(Path.GetDirectoryName(path))
                 {
@@ -93,24 +99,26 @@ namespace NecronomiconBot.Modules
             private static void FileChanged(object sender, FileSystemEventArgs e)
             {
                 mutex.WaitOne();
-                string code = ReadAll(path);
-                if (code == string.Empty)
+                try
+                {
+                    string code = ReadAll(path);
+                    if (code == string.Empty)
+                        return;
+                    if (!canSendMessages)
+                    {
+                        hasQueue = true;
+                        return;
+                    }
+                    LiveShare.code = code;
+                    message.ModifyAsync(message => { message.Content = messageContent.Replace("%status%", "ONLINE").Replace("%code%", code); });
+                    canSendMessages = false;
+                    hasQueue = false;
+                    timer.Start();
+                }
+                finally
                 {
                     mutex.ReleaseMutex();
-                    return;
                 }
-                if (!canSendMessages)
-                {
-                    hasQueue = true;
-                    mutex.ReleaseMutex();
-                    return;
-                }
-                LiveShare.code = code;
-                message.ModifyAsync( message => { message.Content = messageContent.Replace("%status%", "ONLINE").Replace("%code%", code); });
-                canSendMessages = false;
-                hasQueue = false;
-                timer.Start();
-                mutex.ReleaseMutex();
             }
 
             private static string ReadAll(string path)
