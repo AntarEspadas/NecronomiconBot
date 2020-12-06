@@ -73,7 +73,7 @@ namespace NecronomiconBot.Logic
 
         }
 
-        private string GetPrefix(string type, ulong guildId, ulong channelId, ulong userId)
+        public static string GetPrefix(string type, ulong guildId, ulong channelId, ulong userId)
         {
             if (BotSettings.Instance.GetChannelSettingOrDefault<bool>("prefix:use-user-defined", guildId, channelId)[0])
                 return BotSettings.Instance.GetUserSettingOrDefault<string>($"prefix:{type}", guildId, userId)[0];
