@@ -15,12 +15,19 @@ namespace NecronomiconBot.Modules
         {
             string naturalPrefix = CommandHandler.GetPrefix("natural", Context.Guild.Id, Context.Channel.Id, Context.User.Id);
             string syntheticPrefix = CommandHandler.GetPrefix("synthetic", Context.Guild.Id, Context.Channel.Id, Context.User.Id);
-            string message = $"You can call me using synthetic prefix `{syntheticPrefix}`, natural prefix `{naturalPrefix}` or by mentioning me ({Context.Client.CurrentUser.Mention})\n" +
-                $"Examples:\n" +
-                $"`{syntheticPrefix}say hi`\n" +
-                $"`{naturalPrefix} say hi`\n" +
-                $"`{Context.Client.CurrentUser.Mention}` say hi`";
-            await ReplyAsync(message);
+            List<EmbedFieldBuilder> fields = new List<EmbedFieldBuilder>()
+            {
+                new EmbedFieldBuilder(){Value = $"{syntheticPrefix}help", Name = "Synthetic prefix:"},
+                new EmbedFieldBuilder(){Value = $"{naturalPrefix} help | {naturalPrefix}, help", Name = "Natural prefix:"},
+                new EmbedFieldBuilder(){Value = $"{Context.Client.CurrentUser.Mention} help", Name = "Mention:"}
+            };
+            var eb = new EmbedBuilder()
+            {
+                Title = "Use the help command to know what I can do",
+                Fields = fields
+                
+            };
+            await ReplyAsync(embed:eb.Build());
         }
 
         [Command("say")]
