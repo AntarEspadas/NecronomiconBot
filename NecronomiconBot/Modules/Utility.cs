@@ -5,11 +5,24 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Discord;
 using Discord.WebSocket;
+using NecronomiconBot.Logic;
 
 namespace NecronomiconBot.Modules
 {
     public class Utility: NecroModuleBase<SocketCommandContext>
     {
+        public async Task OnMention()
+        {
+            string naturalPrefix = CommandHandler.GetPrefix("natural", Context.Guild.Id, Context.Channel.Id, Context.User.Id);
+            string syntheticPrefix = CommandHandler.GetPrefix("synthetic", Context.Guild.Id, Context.Channel.Id, Context.User.Id);
+            string message = $"You can call me using synthetic prefix `{syntheticPrefix}`, natural prefix `{naturalPrefix}` or by mentioning me ({Context.Client.CurrentUser.Mention})\n" +
+                $"Examples:\n" +
+                $"`{syntheticPrefix}say hi`\n" +
+                $"`{naturalPrefix} say hi`\n" +
+                $"`{Context.Client.CurrentUser.Mention}` say hi`";
+            await ReplyAsync(message);
+        }
+
         [Command("say")]
         [Alias("echo")]
         [Summary("Send a message in chat.")]
