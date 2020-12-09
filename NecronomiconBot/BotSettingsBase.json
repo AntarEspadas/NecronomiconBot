@@ -1,0 +1,70 @@
+{
+    "prefix:synthetic" : {
+        "Type": "System.String",
+        "DefaultValues": [
+          "n."
+        ],
+        "GuildPermissions": [
+          "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": true,
+        "ValidationRegex": ".+",
+        "RawErrorMessage": "This setting should be at least one character",
+        "Scope": 2,
+        "Visible": true
+    },
+    "prefix:natural" : {
+        "Type": "System.String",
+        "DefaultValues": [
+          "navi"
+        ],
+        "GuildPermissions": [
+          "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": true,
+        "ValidationRegex": ".+",
+        "RawErrorMessage": "This setting should be at least one character",
+        "Scope": 2,
+        "Visible": true
+    },
+    "prefix:use-user-defined" : {
+        "Type": "System.Boolean",
+        "DefaultValues": [
+          "false"
+        ],
+        "GuildPermissions": [
+          "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": true,
+        "ValidationRegex": "(true)|(false)",
+        "RawErrorMessage": "`%s` is not a value. Value must be either `true` or `false`",
+        "Scope": "Guild",
+        "Visible": true
+    },
+    "admin:bot-role-name" : {
+        "Type": "System.String",
+        "DefaultValues": [
+          "Sojiro"
+        ],
+        "GuildPermissions": [
+          "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": false,
+        "ValidationRegex": ".+",
+        "RawErrorMessage": "This setting should be at least one character",
+        "Scope": "Guild",
+        "Visible": true
+    }
+}

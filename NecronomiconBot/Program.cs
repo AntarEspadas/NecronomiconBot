@@ -33,7 +33,7 @@ namespace NecronomiconBot
                 return;
             }
 
-            BotSettings.Init(Path.Combine(".", "BotSettings.json"), Path.Combine(".", "BotSettingsSchema.json"));
+            BotSettings.Init(Path.Combine(".", "BotSettings.json"), Path.Combine(".", "BotSettingsBase.json"));
             var settings = BotSettings.Instance;
             if (settings.Token == null || settings.Token == string.Empty)
             {
