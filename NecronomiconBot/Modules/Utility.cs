@@ -66,5 +66,12 @@ namespace NecronomiconBot.Modules
             }
         }
 
+        [Command("help")]
+        [Alias("h","-h","--help","halp")]
+        public async Task Help()
+        {
+            await ReplyAsync("Sorry, this command has not yet been implemented");
+        }
+
     }
 }
