@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord;
 using Discord.WebSocket;
 using NecronomiconBot.Logic;
+using NecronomiconBot.Settings;
 
 namespace NecronomiconBot.Modules
 {
@@ -45,16 +46,21 @@ namespace NecronomiconBot.Modules
         public async Task UneditAsync()
         {
             IMessage message = await GetParentMessageAsync(Context.Message);
-            if (message.EditedTimestamp != null)
-            {
-                var messages = Logic.MessageHistory.Instance.GetHistory(message);
-                _ = SendAllHistory(messages);
-            }
+            if (message.EditedTimestamp is null)
+                return;
+            var messages = Logic.MessageHistory.Instance.GetHistory(message);
+            if (messages is null)
+                return;
+            _ = SendAllHistory(messages);
         }
         [Command("undelete")]
         public async Task UndeleteAsync()
         {
+            if (BotSettings.Instance.GetChannelSettingOrDefault<bool>("undelete:opt-out", Context.Guild.Id, Context.Channel.Id)[0])
+                return;
             var messages = Logic.MessageHistory.Instance.GetLastDeletedHistory(Context.Message.Channel);
+            if (messages is null || BotSettings.Instance.GetUserSettingOrDefault<bool>("undelete:opt-out", Context.Guild.Id, messages.First.Value.Author.Id)[0])
+                return;
             _ = SendAllHistory(messages);
         }
         private async Task SendAllHistory(ICollection<IMessage> messages)
