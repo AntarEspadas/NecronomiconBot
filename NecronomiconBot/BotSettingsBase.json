@@ -1,11 +1,11 @@
 {
-    "prefix:synthetic" : {
+    "prefix:synthetic": {
         "Type": "System.String",
         "DefaultValues": [
-          "n."
+            "n."
         ],
         "GuildPermissions": [
-          "Administrator"
+            "Administrator"
         ],
         "ChannelPermissions": [
 
@@ -16,13 +16,13 @@
         "Scope": 2,
         "Visible": true
     },
-    "prefix:natural" : {
+    "prefix:natural": {
         "Type": "System.String",
         "DefaultValues": [
-          "navi"
+            "navi"
         ],
         "GuildPermissions": [
-          "Administrator"
+            "Administrator"
         ],
         "ChannelPermissions": [
 
@@ -33,30 +33,30 @@
         "Scope": 2,
         "Visible": true
     },
-    "prefix:use-user-defined" : {
+    "prefix:use-user-defined": {
         "Type": "System.Boolean",
         "DefaultValues": [
-          "false"
+            "false"
         ],
         "GuildPermissions": [
-          "Administrator"
+            "Administrator"
         ],
         "ChannelPermissions": [
 
         ],
         "PermissionRole": true,
         "ValidationRegex": "(true)|(false)",
-        "RawErrorMessage": "`%s` is not a value. Value must be either `true` or `false`",
+        "RawErrorMessage": "`%s` is not a valid value. Value must be either `true` or `false`",
         "Scope": "Guild",
         "Visible": true
     },
-    "admin:bot-role-name" : {
+    "admin:bot-role-name": {
         "Type": "System.String",
         "DefaultValues": [
-          "Sojiro"
+            "Sojiro"
         ],
         "GuildPermissions": [
-          "Administrator"
+            "Administrator"
         ],
         "ChannelPermissions": [
 
@@ -65,6 +65,23 @@
         "ValidationRegex": ".+",
         "RawErrorMessage": "This setting should be at least one character",
         "Scope": "Guild",
+        "Visible": true
+    },
+    "undelete:opt-out": {
+        "Type": "System.Boolean",
+        "DefaultValues": [
+            "false"
+        ],
+        "GuildPermissions": [
+            "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": true,
+        "ValidationRegex": "(true)|(false)",
+        "RawErrorMessage": "`%s` is not a valid value. Value must be either `true` or `false`",
+        "Scope": "Both",
         "Visible": true
     }
 }
