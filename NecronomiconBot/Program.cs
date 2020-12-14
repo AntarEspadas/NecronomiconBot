@@ -35,7 +35,11 @@ namespace NecronomiconBot
 
             BotSettings.Init(Path.Combine(".", "BotSettings.json"), Path.Combine(".", "BotSettingsBase.json"));
             var settings = BotSettings.Instance;
-            if (settings.Token == null || settings.Token == string.Empty)
+            if (args != null && args.Length == 1 && ! String.IsNullOrWhiteSpace(args[0]))
+            {
+                settings.Token = args[0];
+            }
+            else if (settings.Token == null || settings.Token == string.Empty)
             {
                 while (true)
                 {
@@ -45,15 +49,6 @@ namespace NecronomiconBot
                         break;
                 }
                 
-            }
-            else
-            {
-                Console.WriteLine("Please enter your bot's token (leave empty to use previously used token):");
-                string tokenValue = Console.ReadLine();
-                if (tokenValue != string.Empty)
-                {
-                    settings.Token = tokenValue;
-                }
             }
             settings.Save();
 
