@@ -32,8 +32,9 @@ namespace NecronomiconBot
                 Testing();
                 return;
             }
-
-            BotSettings.Init(Path.Combine(".", "BotSettings.json"), Path.Combine(".", "BotSettingsBase.json"));
+            string executablePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string executableDir = Path.GetDirectoryName(executablePath);
+            BotSettings.Init(Path.Combine(executableDir, "BotSettings.json"), Path.Combine(executableDir, "BotSettingsBase.json"));
             var settings = BotSettings.Instance;
             if (args != null && args.Length == 1 && ! String.IsNullOrWhiteSpace(args[0]))
             {
