@@ -48,6 +48,16 @@ namespace NecronomiconBot.Modules
             IMessage message = await GetParentMessageAsync(Context.Message);
             if (message.EditedTimestamp is null)
                 return;
+            if (BotSettings.Instance.GetChannelSettingOrDefault<bool>("unedit:opt-out", Context.Guild.Id, Context.Channel.Id)[0])
+            {
+                await ReplyAsync("Sorry, that command is disabled for this channel or server");
+                return;
+            }
+            if (BotSettings.Instance.GetUserSettingOrDefault<bool>("unedit:opt-out", Context.Guild.Id, message.Author.Id)[0])
+            {
+                await ReplyAsync("Sorry, the targeted user has opted out of this feature");
+                return;
+            }
             var messages = Logic.MessageHistory.Instance.GetHistory(message);
             if (messages is null)
                 return;
