@@ -128,8 +128,8 @@ namespace NecronomiconBot.Modules
         private async Task SendSecretSantaMessage(IUser gifter, IUser giftee, Embed organizerMessage)
         {
             var DMChannel = await gifter.GetOrCreateDMChannelAsync();
-            string message = $"Hello! These are the results of the Secret Santa draw created by {Context.Message.Author.Mention} ({Context.Message.Author.Username}{Context.Message.Author.Discriminator}).\n" +
-                $"Click this black box to find out the username of the person you will be gifting to:\n||You will be gifting {giftee.Mention} ({giftee.Username}{giftee.Discriminator})!||";
+            string message = $"Hello! These are the results of the Secret Santa draw created by {Context.Message.Author.Mention} ({Context.Message.Author.Username}#{Context.Message.Author.Discriminator}).\n" +
+                $"Click this black box to find out the username of the person you will be gifting to:\n||You will be gifting {giftee.Mention} ({giftee.Username}#{giftee.Discriminator})!||";
             if (organizerMessage != null)
                 message += "\nThe organizer for this Secret Santa has attached a message for you:\n";
             await DMChannel.SendMessageAsync(message, embed:organizerMessage);
