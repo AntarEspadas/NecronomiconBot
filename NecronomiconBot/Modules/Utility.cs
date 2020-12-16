@@ -67,10 +67,18 @@ namespace NecronomiconBot.Modules
         public async Task UndeleteAsync()
         {
             if (BotSettings.Instance.GetChannelSettingOrDefault<bool>("undelete:opt-out", Context.Guild.Id, Context.Channel.Id)[0])
+            {
+                await ReplyAsync("Sorry, that command is disabled for this channel or server");
                 return;
+            }
             var messages = Logic.MessageHistory.Instance.GetLastDeletedHistory(Context.Message.Channel);
-            if (messages is null || BotSettings.Instance.GetUserSettingOrDefault<bool>("undelete:opt-out", Context.Guild.Id, messages.First.Value.Author.Id)[0])
+            if (messages is null)
                 return;
+            if (BotSettings.Instance.GetUserSettingOrDefault<bool>("undelete:opt-out", Context.Guild.Id, messages.First.Value.Author.Id)[0])
+            {
+                await ReplyAsync("Sorry, the latest user to have deleted a message in this channel has opted out of this feature");
+                return;
+            }
             _ = SendAllHistory(messages);
         }
         private async Task SendAllHistory(ICollection<IMessage> messages)
