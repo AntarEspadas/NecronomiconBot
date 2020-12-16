@@ -28,16 +28,16 @@ namespace NecronomiconBot.Logic
                 string stringValue = (string)value;
                 if (float.TryParse(stringValue, out var result))
                 {
-                    return new Probablility(result);
+                    return new Probability(result);
                 }
                 var groups = regex.Match(stringValue).Groups;
                 if (groups.Count > 0)
                 {
-                    return new Probablility(float.Parse(groups[1].Value) / float.Parse(groups[2].Value) * 100);
+                    return new Probability(float.Parse(groups[1].Value) / float.Parse(groups[2].Value) * 100);
                 }
                 else
                 {
-                    return new Probablility(float.Parse(stringValue));
+                    return new Probability(float.Parse(stringValue));
                 }
                 
             }
@@ -48,7 +48,7 @@ namespace NecronomiconBot.Logic
         {
             if (destinationType == typeof(string))
             {
-                return ((Probablility)value).ToString();
+                return ((Probability)value).ToString();
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
