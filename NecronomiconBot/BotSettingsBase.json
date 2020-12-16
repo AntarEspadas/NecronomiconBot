@@ -83,5 +83,22 @@
         "RawErrorMessage": "`%s` is not a valid value. Value must be either `true` or `false`",
         "Scope": "Both",
         "Visible": true
+    },
+    "unedit:opt-out": {
+        "Type": "System.Boolean",
+        "DefaultValues": [
+            "false"
+        ],
+        "GuildPermissions": [
+            "Administrator"
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": true,
+        "ValidationRegex": "(true)|(false)",
+        "RawErrorMessage": "`%s` is not a valid value. Value must be either `true` or `false`",
+        "Scope": "Both",
+        "Visible": true
     }
 }
