@@ -90,6 +90,60 @@ namespace NecronomiconBot.Modules
             }
         }
 
+        [Command("secret santa")]
+        [Alias("secret-santa")]
+        public async Task SecretSanta(SocketRole participatingRole, [Remainder]string message = null)
+        {
+            List<IUser> participatingUsers = new List<IUser>();
+            foreach (var user in participatingRole.Members)
+                if (!user.IsBot)
+                    participatingUsers.Add(user);
+            await SecretSanta(participatingUsers, message);
+        }
+
+        [Command("secret santa")]
+        [Alias("secret-santa")]
+        public async Task SecretSanta(string message, [Remainder]string participantsString)
+        {
+            var mentionedUsers = Context.Message.MentionedUsers;
+            List<IUser> participatingUsers = new List<IUser>(mentionedUsers.Count);
+            foreach (var user in mentionedUsers)
+                if (!user.IsBot)
+                    participatingUsers.Add(user);
+            await SecretSanta(participatingUsers, message);
+        }
+
+        private async Task SecretSanta(ICollection<IUser> participatingUsers, string message = null)
+        {
+            if (participatingUsers.Count <= 1)
+            {
+                await ReplyAsync("You need at least four people for a Secret Santa.");
+                return;
+            }
+            if (participatingUsers.Count <= 3)
+                await ReplyAsync("This isn't much of a \"Secret\" Santa, but whatever.");
+            List<IUser> derrangedList = new List<IUser>(participatingUsers);
+            Probability.Derrange(derrangedList);
+            Embed organizerMessage = null;
+            if (message != null)
+                organizerMessage = new EmbedBuilder() { Description = message }.Build();
+            int i = 0;
+            foreach (var gifter in participatingUsers)
+            {
+                _ = SendSecretSantaMessage(gifter, derrangedList[i++], organizerMessage);
+            }
+        }
+
+        private async Task SendSecretSantaMessage(IUser gifter, IUser giftee, Embed organizerMessage)
+        {
+            var DMChannel = await gifter.GetOrCreateDMChannelAsync();
+            string message = $"Hello! These are the results of the Secret Santa draw created by {Context.Message.Author.Mention}.\n" +
+                $"You will be gifting {giftee.Mention}!";
+            if (organizerMessage != null)
+                message += "\nThe organizer for this Secret Sante has attached a message for you:\n";
+            await DMChannel.SendMessageAsync(message, embed:organizerMessage);
+        }
+
         [Command("help")]
         [Alias("h","-h","--help","halp")]
         public async Task Help()
