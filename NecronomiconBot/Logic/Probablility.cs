@@ -42,12 +42,12 @@ namespace NecronomiconBot.Logic
                 {
                     do
                     {
-                        j = random.Next(0, i - 1);
+                        j = random.Next(0, i);
                     } while (marked[j]);
                     T temp = list[i];
                     list[i] = list[j];
                     list[j] = temp;
-                    p.Percentage = (u - 1) * (d[u - 2] / d[u]) * 100;
+                    p.Percentage = (u - 1) * (d[u - 2] / (float)d[u]) * 100;
                     if (p.Roll())
                     {
                         marked[j] = true;
