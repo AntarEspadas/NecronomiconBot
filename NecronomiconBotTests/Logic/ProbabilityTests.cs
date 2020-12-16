@@ -51,7 +51,7 @@ namespace NecronomiconBotTests.Loigc
             {
                 list[i] = i;
             }
-            for (int i = 0; i <= 10; i++)
+            for (int i = 0; i <= 50; i++)
             {
                 list.CopyTo(listCopy, 0);
                 Probability.Derrange(listCopy);
