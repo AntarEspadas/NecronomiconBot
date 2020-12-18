@@ -94,6 +94,13 @@ namespace NecronomiconBot.Modules
         [Alias("secret-santa")]
         public async Task SecretSanta(SocketRole participatingRole, [Remainder]string message = null)
         {
+            DateTime lastSent = BotSettings.Instance.GetGuildSettingOrDefault<DateTime>("_secret-santa:last-sent", Context.Guild.Id)[0];
+            if (Context.User.Id != Context.Guild.OwnerId && DateTime.Today - lastSent < TimeSpan.FromDays(1))
+            {
+                await ReplyAsync("This command can only be used once every 24 hours per server, only the owner of the server may bypass this restriction");
+                return;
+            }
+
             List<IUser> participatingUsers = new List<IUser>();
             foreach (var user in participatingRole.Members)
                 if (!user.IsBot)
@@ -117,6 +124,12 @@ namespace NecronomiconBot.Modules
                 organizerMessage = new EmbedBuilder() { Description = message }.Build();
 
             await ReplyAsync($"I will be messageing the members of `{participatingRole.Name}` with information about the draw!");
+            IList<string> setting = BotSettings.Instance.GetGuildSetting("_secret-santa:last-sent", Context.Guild.Id);
+            string now = DateTime.Today.ToString();
+            if (setting.Count < 1)
+                setting.Add(now);
+            else
+                setting[0] = now;
 
             int i = 0;
             foreach (var gifter in participatingUsers)
