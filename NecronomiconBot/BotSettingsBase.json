@@ -100,5 +100,22 @@
         "RawErrorMessage": "`%s` is not a valid value. Value must be either `true` or `false`",
         "Scope": "Both",
         "Visible": true
+    },
+    "_secret-santa:last-sent": {
+        "Type": "System.DateTime",
+        "DefaultValues": [
+            ""
+        ],
+        "GuildPermissions": [
+
+        ],
+        "ChannelPermissions": [
+
+        ],
+        "PermissionRole": false,
+        "ValidationRegex": ".*",
+        "RawErrorMessage": "",
+        "Scope": "Guild",
+        "Visible": false
     }
 }
