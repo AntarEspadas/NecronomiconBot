@@ -129,5 +129,13 @@ namespace NecronomiconBot.Modules
             };
             await ReplyAsync(embed: eb.Build());
         }
+        public async Task Vente()
+        {
+            string ahegaosFolder = Path.Combine(assetsFolder, "ahegaos");
+            if (!File.Exists(ahegaosFolder))
+                return;
+            string[] ahegaos = Directory.EnumerateFiles(ahegaosFolder).ToArray();
+            //string ahegao = ahegaos.RandomElement()
+        }
     }
 }
