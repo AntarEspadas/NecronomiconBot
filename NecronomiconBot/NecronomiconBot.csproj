@@ -7,9 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
-    <PackageReference Include="Emgu.CV" Version="4.4.0.4099" />
-    <PackageReference Include="OpenCvSharp4" Version="4.5.0.20201013" />
-    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.5.0.20201013" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
