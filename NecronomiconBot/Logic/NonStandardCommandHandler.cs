@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace NecronomiconBot.Logic
 {
@@ -30,12 +31,22 @@ namespace NecronomiconBot.Logic
                 var utility = new Utility();
                 utility.SetContext(context);
                 await utility.OnMention();
+                return;
             }
-            else if (new Random().Next(0,500) == 69)
+            Regex regex = new Regex("\\bvente\\b", RegexOptions.IgnoreCase);
+            if (message.Content.Length <= 35 && regex.IsMatch(message.Content))
+            {
+                var memes = new Memes();
+                memes.SetContext(context);
+                await memes.Vente();
+                return;
+            }
+            if (new Random().Next(0,500) == 69)
             {
                 var memes = new Memes();
                 memes.SetContext(context);
                 await memes.FakeQuote(message.Content);
+                return;
             }
         }
 
