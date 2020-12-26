@@ -7,7 +7,7 @@ using Discord;
 using Discord.WebSocket;
 using NecronomiconBot.Logic;
 using NecronomiconBot.Settings;
-using NecronomiconBot.Logic.Probability;
+using NecronomiconBot.Logic.Distribution;
 
 namespace NecronomiconBot.Modules
 {
