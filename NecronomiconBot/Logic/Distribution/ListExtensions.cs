@@ -34,5 +34,12 @@ namespace NecronomiconBot.Logic.Distribution
                 }
             }
         }
+    
+        public static T RandomElement<T>(this IList<T> list)
+        {
+            if (list.Count == 0)
+                throw new ArgumentException("List may not be empty");
+            return list[random.Next(0, list.Count)];
+        }
     }
 }
