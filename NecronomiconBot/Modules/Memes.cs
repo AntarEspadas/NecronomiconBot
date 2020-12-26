@@ -135,13 +135,13 @@ namespace NecronomiconBot.Modules
         public async Task Vente()
         {
             string ahegaosFolder = Path.Combine(assetsFolder, "ahegaos");
-            if (!File.Exists(ahegaosFolder))
+            if (!Directory.Exists(ahegaosFolder))
                 return;
             string[] ahegaos = Directory.EnumerateFiles(ahegaosFolder).ToArray();
             if (ahegaos.Length > 0)
             {
                 string ahegao = ahegaos.RandomElement();
-                await ReplyAsync(ahegao);
+                await Context.Channel.SendFileAsync(ahegao);
             }
         }
     }
