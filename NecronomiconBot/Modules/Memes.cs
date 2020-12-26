@@ -7,11 +7,14 @@ using Discord;
 using Discord.WebSocket;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.IO;
+using NecronomiconBot.Logic.Distribution;
 
 namespace NecronomiconBot.Modules
 {
     public class Memes : NecroModuleBase<SocketCommandContext>
     {
+        private static readonly string assetsFolder = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "assets");
         [Command("step on me")]
         public Task StepOnMe()
         {
@@ -135,7 +138,11 @@ namespace NecronomiconBot.Modules
             if (!File.Exists(ahegaosFolder))
                 return;
             string[] ahegaos = Directory.EnumerateFiles(ahegaosFolder).ToArray();
-            //string ahegao = ahegaos.RandomElement()
+            if (ahegaos.Length > 0)
+            {
+                string ahegao = ahegaos.RandomElement();
+                await ReplyAsync(ahegao);
+            }
         }
     }
 }
