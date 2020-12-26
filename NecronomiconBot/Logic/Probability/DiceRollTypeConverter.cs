@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NecronomiconBot.Logic
+namespace NecronomiconBot.Logic.Probability
 {
-    class TypeConverterProbablillityConverter : TypeConverter
+    class DiceRollTypeConverter : TypeConverter
     {
         private static readonly Regex  regex = new Regex(@"^\s*(\d+)\b\s*(?:in|\/)\s*\b(\d+)\s*$");
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -28,16 +28,16 @@ namespace NecronomiconBot.Logic
                 string stringValue = (string)value;
                 if (float.TryParse(stringValue, out var result))
                 {
-                    return new Probability(result);
+                    return new DiceRoll(result);
                 }
                 var groups = regex.Match(stringValue).Groups;
                 if (groups.Count > 0)
                 {
-                    return new Probability(float.Parse(groups[1].Value) / float.Parse(groups[2].Value) * 100);
+                    return new DiceRoll(float.Parse(groups[1].Value) / float.Parse(groups[2].Value) * 100);
                 }
                 else
                 {
-                    return new Probability(float.Parse(stringValue));
+                    return new DiceRoll(float.Parse(stringValue));
                 }
                 
             }
@@ -48,7 +48,7 @@ namespace NecronomiconBot.Logic
         {
             if (destinationType == typeof(string))
             {
-                return ((Probability)value).ToString();
+                return ((DiceRoll)value).ToString();
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }

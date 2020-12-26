@@ -7,6 +7,7 @@ using Discord;
 using Discord.WebSocket;
 using NecronomiconBot.Logic;
 using NecronomiconBot.Settings;
+using NecronomiconBot.Logic.Probability;
 
 namespace NecronomiconBot.Modules
 {
@@ -118,7 +119,7 @@ namespace NecronomiconBot.Modules
                 await ReplyAsync("Sorry, I can only do Secret Santas with 30 people or fewer.");
             }
             List<IUser> derrangedList = new List<IUser>(participatingUsers);
-            Probability.Derrange(derrangedList);
+            derrangedList.Derrange();
             Embed organizerMessage = null;
             if (message != null)
                 organizerMessage = new EmbedBuilder() { Description = message }.Build();

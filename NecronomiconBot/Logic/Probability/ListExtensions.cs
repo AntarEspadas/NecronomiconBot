@@ -1,38 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 
-namespace NecronomiconBot.Logic
+namespace NecronomiconBot.Logic.Probability
 {
-    [TypeConverter(typeof(TypeConverterProbablillityConverter))]
-    public class Probability
+    public static class ListExtensions
     {
-        public float Percentage { get { return percentage; } set => SetPercentage(value); }
-        private float percentage;
-        private static Random random = new Random();
-
-        public Probability(float percentage)
+        private static readonly Random random = new Random();
+        public static void Derrange<T>(this IList<T> list)
         {
-            Percentage = percentage;
-        }
-        private void SetPercentage(float value)
-        {
-            if (percentage < 0 || percentage > 100)
-            {
-                throw new ArgumentException();
-            }
-            percentage = value;
-        }
-        public bool Roll()
-        {
-            return random.NextDouble() < (Percentage / 100);
-        }
-
-        public static void Derrange<T>(IList<T> list)
-        {
-            Random random = new Random();
-            Probability p = new Probability(0);
+            DiceRoll p = new DiceRoll(0);
             bool[] marked = new bool[list.Count];
             long[] d = AllSubfactorials(list.Count);
             int j;
