@@ -41,6 +41,13 @@ namespace NecronomiconBot.Logic
                 await memes.Vente();
                 return;
             }
+            if (message.Content == "a")
+            {
+                var memes = new Memes();
+                memes.SetContext(context);
+                await memes.A();
+                return;
+            }
             if (new Random().Next(0,500) == 69)
             {
                 var memes = new Memes();

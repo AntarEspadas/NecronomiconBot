@@ -144,5 +144,12 @@ namespace NecronomiconBot.Modules
                 await Context.Channel.SendFileAsync(ahegao);
             }
         }
+
+        public async Task A()
+        {
+            string aPath = Path.Combine(assetsFolder, "a.gif");
+            if (!File.Exists(aPath)) return;
+            await Context.Channel.SendFileAsync(aPath);
+        }
     }
 }
