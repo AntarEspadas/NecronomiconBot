@@ -16,6 +16,8 @@ namespace NecronomiconBot.Logic
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
 
+        private static readonly HashSet<char> a = new HashSet<char>(@"ꞛ𐐺Ꞛ𐐒ẚảăǎĂǍåȧäӓÅȦÄӒaɑαа⍺ａ𝐚𝑎𝒂𝒶𝓪𝔞𝕒𝖆𝖺𝗮𝘢𝙖𝚊𝛂𝛼𝜶𝝰𝞪AΑАᎪᗅᴀꓮꭺＡ𐊠𖽀𝐀𝐴𝑨𝒜𝓐𝔄𝔸𝕬𝖠𝗔𝘈𝘼𝙰𝚨𝛢𝜜𝝖𝞐ª");
+
         public NonStandardCommandHandler(DiscordSocketClient client, CommandService commands)
         {
             _client = client;
@@ -24,6 +26,7 @@ namespace NecronomiconBot.Logic
 
         public async Task HandleCommandAsync(SocketUserMessage message)
         {
+            string messageContent = message.Content;
             var context = new SocketCommandContext(_client, message);
             int argPos = 0;
             if (IsOnlyMention(message, _client.CurrentUser))
@@ -34,14 +37,14 @@ namespace NecronomiconBot.Logic
                 return;
             }
             Regex regex = new Regex("\\bvente\\b", RegexOptions.IgnoreCase);
-            if (message.Content.Length <= 35 && regex.IsMatch(message.Content))
+            if (messageContent.Length <= 35 && regex.IsMatch(messageContent))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
                 await memes.Vente();
                 return;
             }
-            if (message.Content == "a")
+            if (messageContent.Length == 1 && a.Contains(messageContent[0]))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
@@ -52,7 +55,7 @@ namespace NecronomiconBot.Logic
             {
                 var memes = new Memes();
                 memes.SetContext(context);
-                await memes.FakeQuote(message.Content);
+                await memes.FakeQuote(messageContent);
                 return;
             }
         }
