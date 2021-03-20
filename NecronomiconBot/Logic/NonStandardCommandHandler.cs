@@ -59,7 +59,7 @@ namespace NecronomiconBot.Logic
                 await memes.Vente();
                 return;
             }
-            if (a.Contains(StripNonSpacingMarks(messageContent)))
+            if (a.Contains(StripNonSpacingMarks(messageContent).Trim()))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
