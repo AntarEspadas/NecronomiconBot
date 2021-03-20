@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace NecronomiconBot.Logic
 {
@@ -16,7 +17,20 @@ namespace NecronomiconBot.Logic
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
 
-        private static readonly HashSet<char> a = new HashSet<char>(@"ꞛ𐐺Ꞛ𐐒ẚảăǎĂǍåȧäӓÅȦÄӒaɑαа⍺ａ𝐚𝑎𝒂𝒶𝓪𝔞𝕒𝖆𝖺𝗮𝘢𝙖𝚊𝛂𝛼𝜶𝝰𝞪AΑАᎪᗅᴀꓮꭺＡ𐊠𖽀𝐀𝐴𝑨𝒜𝓐𝔄𝔸𝕬𝖠𝗔𝘈𝘼𝙰𝚨𝛢𝜜𝝖𝞐ª");
+        private static readonly HashSet<string> a;
+
+        static NonStandardCommandHandler()
+        {
+            string aPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),"assets", "a", "a.txt");
+            try
+            {
+                a = new HashSet<string>(File.ReadAllLines(aPath));
+            }
+            catch
+            {
+                a = new HashSet<string>(new[] { "a", "A"});
+            }
+        }
 
         public NonStandardCommandHandler(DiscordSocketClient client, CommandService commands)
         {
@@ -44,7 +58,7 @@ namespace NecronomiconBot.Logic
                 await memes.Vente();
                 return;
             }
-            if (messageContent.Length == 1 && a.Contains(messageContent[0]))
+            if (a.Contains(messageContent))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
