@@ -59,7 +59,10 @@ namespace NecronomiconBot.Logic
                 await memes.Vente();
                 return;
             }
-            if (a.Contains(StripNonSpacingMarks(messageContent).Trim()))
+            string strippedContent = StripNonSpacingMarks(messageContent);
+            strippedContent = strippedContent.Trim();
+            strippedContent = strippedContent.Trim(new[] { '\u200B', '\uFEFF' });
+            if (a.Contains(strippedContent))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
