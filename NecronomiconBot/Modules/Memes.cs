@@ -147,7 +147,7 @@ namespace NecronomiconBot.Modules
 
         public async Task A()
         {
-            string aPath = Path.Combine(assetsFolder, "a.gif");
+            string aPath = Path.Combine(assetsFolder, "a", "a.gif");
             if (!File.Exists(aPath)) return;
             await Context.Channel.SendFileAsync(aPath);
         }
