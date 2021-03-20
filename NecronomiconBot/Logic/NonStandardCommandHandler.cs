@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Globalization;
 
 namespace NecronomiconBot.Logic
 {
@@ -58,7 +59,7 @@ namespace NecronomiconBot.Logic
                 await memes.Vente();
                 return;
             }
-            if (a.Contains(messageContent))
+            if (a.Contains(StripNonSpacingMarks(messageContent)))
             {
                 var memes = new Memes();
                 memes.SetContext(context);
@@ -84,6 +85,19 @@ namespace NecronomiconBot.Logic
             if (userId == user.Id)
                 return true;
             return false;
+        }
+
+        private string StripNonSpacingMarks(string str)
+        {
+            var stringBuilder = new StringBuilder(str.Length);
+            foreach (char chr in str)
+            {
+                var category = CharUnicodeInfo.GetUnicodeCategory(chr);
+                if (category != UnicodeCategory.NonSpacingMark)
+                    stringBuilder.Append(chr);
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }
